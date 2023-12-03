@@ -29,10 +29,10 @@ class AgoraCLI:
             print(f"Error: {str(e)}")
         finally:
             self.driver.quit()
-            print("\nGracias por usar AgoraCLI.")
+            print("\n")
+            print(Colors.colorize("Gracias por usar AgoraCLI", f"{Colors.BOLD}{Colors.BG_WHITE}{Colors.BLACK}"))
             github_profile = Colors.colorize("https://github.com/4DRIAN0RTIZ", Colors.GREEN)
             blog_site = Colors.colorize("https://cuevaneander.tech", Colors.GREEN)
-            print(Colors.colorize("Texto con fondo verde, color blanco y negrita", f"{Colors.BOLD}{Colors.BG_GREEN}{Colors.WHITE}"))
             print(f"Github: {github_profile}")
             print(f"Blog: {blog_site}")
 
