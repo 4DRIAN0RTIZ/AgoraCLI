@@ -5,6 +5,11 @@
 # Author: 4DRI4N0RTIZ (NeanderTech)
 # Date: 2023-12-03
 #
+#       __                     _          _____  __ ___          _____           _        _ _
+#    /\ \ \___  __ _ _ __   __| | ___ _ _/__   \/__/ __\/\  /\   \_   \_ __  ___| |_ __ _| | |
+#   /  \/ / _ \/ _` | '_ \ / _` |/ _ | '__|/ /\/_\/ /  / /_/ /    / /\| '_ \/ __| __/ _` | | |
+#  / /\  |  __| (_| | | | | (_| |  __| |  / / //_/ /__/ __  /  /\/ /_ | | | \__ | || (_| | | |
+#  \_\ \/ \___|\__,_|_| |_|\__,_|\___|_|  \/  \__\____\/ /_/   \____/ |_| |_|___/\__\__,_|_|_|
 #
 
 # Ansi color codes
@@ -35,10 +40,10 @@ trap ctrl_c INT
 
 cd "$agoracli_path" || exit # Change directory to $HOME/.local/bin/agoracli. If the directory doesnt exist, exit the script.
 declare -A files_to_download=(
-	["agoracli.py"]="https://raw.githubusercontent.com/4DRIAN0RTIZ/AgoraCLI/master/agoracli.py"
-	["agora_sesion.py"]="https://raw.githubusercontent.com/4DRIAN0RTIZ/AgoraCLI/master/agora_sesion.py"
-	["calificaciones_consultor.py"]="https://raw.githubusercontent.com/4DRIAN0RTIZ/AgoraCLI/master/calificaciones_consultor.py"
-	["utils.py"]="https://raw.githubusercontent.com/4DRIAN0RTIZ/AgoraCLI/master/utils.py"
+	["agoracli.py"]="https://raw.githubusercontent.com/4DRIAN0RTIZ/AgoraCLI/master/src/agoracli.py"
+	["agora_sesion.py"]="https://raw.githubusercontent.com/4DRIAN0RTIZ/AgoraCLI/master/src/agora_sesion.py"
+	["calificaciones_consultor.py"]="https://raw.githubusercontent.com/4DRIAN0RTIZ/AgoraCLI/master/src/calificaciones_consultor.py"
+	["utils.py"]="https://raw.githubusercontent.com/4DRIAN0RTIZ/AgoraCLI/master/src/utils.py"
 	["requirements.txt"]="https://raw.githubusercontent.com/4DRIAN0RTIZ/AgoraCLI/master/requirements.txt"
 )
 
