@@ -23,7 +23,18 @@ class AgoraSesion:
         iniciar_sesion_button.click()
 
         try:
-            WebDriverWait(self.driver, 5).until(EC.url_to_be("https://agora.utj.edu.mx/home/index"))
+            WebDriverWait(self.driver, 5).until(
+                lambda driver: (
+                    EC.url_to_be("https://agora.utj.edu.mx/home/index")(driver) or
+                    EC.url_to_be("https://agora.utj.edu.mx/Evaluacion/AlumnoProfesor")(driver)
+                )
+            )
+
+            # Verificar si la URL es Evaluacion/AlumnoProfesor
+            if "https://agora.utj.edu.mx/Evaluacion/AlumnoProfesor" in self.driver.current_url:
+                print(Colors.colorize("Aviso: No has evaluado a tus profesores.", Colors.YELLOW))
+                print(Colors.colorize("Antes de consultar tus calificaciones realiza la evaluación en la plataforma.", Colors.YELLOW))
+                sys.exit(1)
         except TimeoutException:
             # Limpiar la última línea de la consola
             print(Colors.colorize("Error: Usuario o contraseña incorrectos.", Colors.RED))
