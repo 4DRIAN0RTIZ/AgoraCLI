@@ -44,28 +44,15 @@ Me tomé la tarea de automatizar el proceso de instalación, por lo que solo es 
 ```bash
 curl -s https://raw.githubusercontent.com/4DRIAN0RTIZ/AgoraCLI/master/install.sh | bash
 ```
+## Windows
+```powershell
+Invoke-WebRequest -Uri https://raw.githubusercontent.com/4DRIAN0RTIZ/AgoraCLI/master/Install.ps1 -OutFile Install.ps1
+.\Install.ps1
+```
+
 
 Pueden estar seguros de que el instalador es seguro, aunque les recomiendo **SIEMPRE** ver que van a instalar antes de ejecutar cualquier cosa.
 
-
-### Windows
-
-En Windows es todavía más fácil, basta con clonar el repositorio.
-```bash
-git clone https://github.com/4DRIAN0RTIZ/AgoraCLI.git
-```
-Crear un _entorno virtual_ con Python
-```bash
-python3 -m venv <virtual_env_name>
-# Activarlo
-.\<virtual_env_name>\Scripts\activate
-```
-
-Instalar las dependencias del archivo `requirements.txt` con `pip`
-
-```bash
-pip install -r requirements.txt
-```
 
 ## Uso
 
