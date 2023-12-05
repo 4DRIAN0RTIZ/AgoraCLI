@@ -22,6 +22,7 @@ class AdeudoConsultor:
         adeudo = adeudo_text.text
         table_data.append([adeudo])
         table_headers = ["Adeudo"]
-        salida = tabulate.tabulate(table_data, headers=table_headers, tablefmt="grid")
+        colalign = ["center"]
+        salida = tabulate.tabulate(table_data, headers=table_headers, tablefmt="grid", colalign=colalign)
         Clear.linea_anterior()
         print(salida)

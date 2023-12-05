@@ -38,7 +38,7 @@ class CalificacionesConsultor:
 
             if "/" in value:
                 # Eliminar todos los espcios en blanco
-                calificacion = value.split("/")[1].strip()
+                calificacion = value.split("/")[1]
                 table_data.append([materia, calificacion, f"{porcentaje}%"])
             else:
                 table_data.append([materia, "Sin calificación capturada", f"{porcentaje}%"])
@@ -46,5 +46,6 @@ class CalificacionesConsultor:
 
         # Mostrar toda la salida al final
         table_headers = ["Materia", "Calificación", "Porcentaje"]
-        salida = tabulate.tabulate(table_data, headers=table_headers, tablefmt="grid")
+        colalign = ["center", "center", "center"]
+        salida = tabulate.tabulate(table_data, headers=table_headers, tablefmt="grid", colalign=colalign)
         print(salida)
