@@ -12,7 +12,7 @@ class AdeudoConsultor:
         Clear.pantalla()
         print("Consultando adeudo...")
         self.driver.get("https://agora.utj.edu.mx/adeudo/adeudo")
-        time.sleep(1)
+        time.sleep(2)
         # Limpia la consola con shutil
         terminal_width = shutil.get_terminal_size().columns
         print(" " * terminal_width, end="\r")
