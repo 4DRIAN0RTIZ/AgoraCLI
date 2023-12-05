@@ -46,8 +46,8 @@ curl -s https://raw.githubusercontent.com/4DRIAN0RTIZ/AgoraCLI/master/install.sh
 ```
 ## Windows
 ```powershell
-Invoke-WebRequest -Uri https://raw.githubusercontent.com/4DRIAN0RTIZ/AgoraCLI/master/Install.ps1 -OutFile Install.ps1
-.\Install.ps1
+Invoke-WebRequest -Uri https://raw.githubusercontent.com/4DRIAN0RTIZ/AgoraCLI/master/Install.ps1 -OutFile install.ps1
+.\install.ps1
 ```
 
 
