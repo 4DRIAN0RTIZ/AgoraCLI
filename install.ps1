@@ -29,7 +29,7 @@ $files_to_download = @{
     "utils.py" = "https://raw.githubusercontent.com/4DRIAN0RTIZ/AgoraCLI/master/src/utils.py"
     "requirements.txt" = "https://raw.githubusercontent.com/4DRIAN0RTIZ/AgoraCLI/master/requirements.txt"
     "adeudo_consultor.py" = "https://raw.githubusercontent.com/4DRIAN0RTIZ/AgoraCLI/master/src/adeudo_consultor.py"
-    "agoracli.bat" = "https://gist.githubusercontent.com/4DRIAN0RTIZ/859c8354e41d629d9bc1329ba5878363/raw/53d5d244e460aeb19d2e0e51034ed2288087cc28/agoracli.bat"
+    "agoracli.bat" = "https://gist.githubusercontent.com/4DRIAN0RTIZ/859c8354e41d629d9bc1329ba5878363/raw/2a65e6d822ffb49ba49e874090c6c62a880afd40/agoracli.bat"
 }
 
 foreach ($file in $files_to_download.Keys) {
@@ -81,7 +81,7 @@ $shortcut.TargetPath = $targetPath
 $shortcut.Save()
 Write-Host "Uso: agoracli -m <matricula>"
 Write-Host "---"
-Write-Host "Instalación completada."
+Write-Host "InstalaciÃ³n completada."
 
 
 
