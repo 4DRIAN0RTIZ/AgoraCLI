@@ -45,7 +45,8 @@ declare -A files_to_download=(
 	["calificaciones_consultor.py"]="https://raw.githubusercontent.com/4DRIAN0RTIZ/AgoraCLI/master/src/calificaciones_consultor.py"
 	["utils.py"]="https://raw.githubusercontent.com/4DRIAN0RTIZ/AgoraCLI/master/src/utils.py"
 	["requirements.txt"]="https://raw.githubusercontent.com/4DRIAN0RTIZ/AgoraCLI/master/requirements.txt"
-  ["adeudo_consultor"]="https://raw.githubusercontent.com/4DRIAN0RTIZ/AgoraCLI/master/src/adeudo_consultor.py"
+	["adeudo_consultor"]="https://raw.githubusercontent.com/4DRIAN0RTIZ/AgoraCLI/master/src/adeudo_consultor.py"
+)
 
 for file in "${!files_to_download[@]}"; do
 	echo -e "${yellow}Descargando $file...${reset}"
