@@ -1,3 +1,6 @@
+import sys
+import shutil
+
 class Colors:
     RESET = '\033[0m'
     BOLD = '\033[1m'
@@ -25,3 +28,14 @@ class Colors:
     @staticmethod
     def colorize(text, color):
         return f"{color}{text}{Colors.RESET}"
+
+
+class Clear:
+    @staticmethod
+    def pantalla():
+        terminal_width = shutil.get_terminal_size().columns
+        print(" " * terminal_width, end="\r")
+    @staticmethod
+    # Borrar el 100% de la linea anterior
+    def linea_anterior():
+        print("\033[F\033[K", end="")

@@ -3,14 +3,15 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
-from utils import Colors
+from utils import Colors, Clear
 
 class AgoraSesion:
     def __init__(self, driver):
         self.driver = driver
 
     def iniciar_sesion(self, usuario, contrasena):
-        sys.stdout.write("\033[F")
+        # Limpiar pantalla con el ancho de la terminal con sys
+        Clear.linea_anterior()
         self.driver.get("https://agora.utj.edu.mx/Account/Login")
 
         usuario_input = self.driver.find_element(By.ID, "usuario")

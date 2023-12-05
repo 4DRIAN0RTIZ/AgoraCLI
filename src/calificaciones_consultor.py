@@ -1,17 +1,16 @@
 import time
 import tabulate
-import shutil
 from selenium.webdriver.common.by import By
+from utils import Clear
 
 class CalificacionesConsultor:
     def __init__(self, driver):
         self.driver = driver
 
     def consultando_calificaciones(self, materia):
-        terminal_width = shutil.get_terminal_size().columns
+        Clear.pantalla()
         mensaje = f"Consultando calificaciones de {materia}"
-        spaces_to_clear = " " * (terminal_width - len(mensaje))
-        print(mensaje + spaces_to_clear, end="\r")
+        print(mensaje, end="\r")
         time.sleep(0.1)
 
     def consultar_calificacion(self):
@@ -38,7 +37,8 @@ class CalificacionesConsultor:
             porcentaje = porcentaje_element.text
 
             if "/" in value:
-                calificacion = value.split("/")[1]
+                # Eliminar todos los espcios en blanco
+                calificacion = value.split("/")[1].strip()
                 table_data.append([materia, calificacion, f"{porcentaje}%"])
             else:
                 table_data.append([materia, "Sin calificación capturada", f"{porcentaje}%"])
