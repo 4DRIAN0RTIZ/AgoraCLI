@@ -71,5 +71,5 @@ Si encuentras algún error o tienes alguna sugerencia, por favor crea un issue o
 
 ## Licencia
 
-Este proyecto está licenciado bajo la licencia MIT. Puedes ver el archivo `LICENSE` para más información.
+Este proyecto está licenciado bajo la licencia GPL-3.0. Puedes ver más detalles en el archivo `LICENSE.txt` del repositorio.
 
