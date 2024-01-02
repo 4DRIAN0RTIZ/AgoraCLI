@@ -98,5 +98,3 @@ Write-Host "Uso: agoracli -m <matricula> | -c | -a | -ho"
 Write-Host "Ayuda: agoracli -h"
 Write-Host "AgoraCLI es software libre. Copyleft (c) 2023 Oscar Adrian Ortiz Bustos, bajo licencia GPL v3."
 
-
-
