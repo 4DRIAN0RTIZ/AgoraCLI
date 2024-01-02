@@ -11,6 +11,18 @@
 #  / /\  |  __| (_| | | | | (_| |  __| |  / / //_/ /__/ __  /  /\/ /_ | | | \__ | || (_| | | |
 #  \_\ \/ \___|\__,_|_| |_|\__,_|\___|_|  \/  \__\____\/ /_/   \____/ |_| |_|___/\__\__,_|_|_|
 #
+# install.sh
+# Copyleft (c) 2023 Oscar Adrian Ortiz Bustos
+
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation version 3 of the License.
+
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+
 
 # Ansi color codes
 red='\033[0;31m'
@@ -19,7 +31,7 @@ yellow='\033[0;33m'
 blue='\033[0;34m'
 reset='\033[0m'
 
-agoracli_path="$HOME/.local/bin/Theagoracli" # Path to install AgoraCLI
+agoracli_path="$HOME/.local/bin/AgoraCLI" # Path to install AgoraCLI
 # Check if the path doesnt exist
 if [ ! -d "$agoracli_path" ]; then
 	echo -e "${red}El directorio $agoracli_path no existe.${reset}"
@@ -46,6 +58,7 @@ declare -A files_to_download=(
 	["utils.py"]="https://raw.githubusercontent.com/4DRIAN0RTIZ/AgoraCLI/master/src/utils.py"
 	["requirements.txt"]="https://raw.githubusercontent.com/4DRIAN0RTIZ/AgoraCLI/master/requirements.txt"
 	["adeudo_consultor.py"]="https://raw.githubusercontent.com/4DRIAN0RTIZ/AgoraCLI/master/src/adeudo_consultor.py"
+	["horario_consultor.py"]="https://raw.githubusercontent.com/4DRIAN0RTIZ/AgoraCLI/master/src/horario_consultor.py"
 )
 
 for file in "${!files_to_download[@]}"; do
@@ -81,4 +94,6 @@ fi
 ln -s "$agoracli_path/agoracli.sh" "$HOME/.local/bin/agoracli" # Create a symbolic link to the bash script
 echo "---"
 echo -e "${green}Instalación completada.${reset}"
-echo -e "${yellow}Uso:${reset} ${blue}agoracli -m <matricula>${reset}"
+echo -e "${yellow}Uso:${reset} ${blue}agoracli -m <matricula> -c | -a | -ho${reset}"
+echo -e "${yellow}Ayuda:${reset} ${blue}agoracli -h${reset}"
+echo -e "${green}AgoraCLI es software libre. Copyleft (c) 2023 Oscar Adrian Ortiz Bustos. Licencia GPLv3.${reset}"

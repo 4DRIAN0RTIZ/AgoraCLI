@@ -1,3 +1,17 @@
+"""
+agoracli.py
+Copyleft (c) 2023 Oscar Adrian Ortiz Bustos
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation version 3 of the License.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+"""
 import argparse
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
@@ -5,6 +19,7 @@ from utils import Colors
 from agora_sesion import AgoraSesion
 from calificaciones_consultor import CalificacionesConsultor
 from adeudo_consultor import AdeudoConsultor
+from horario_consultor import HorarioConsultor
 import getpass
 import sys
 
@@ -14,10 +29,13 @@ class AgoraCLI:
         chrome_options.add_argument("--headless")
         chrome_options.add_argument("--disable-gpu")
         chrome_options.add_argument("--log-level=3")
+        prefs = {"download.default_directory": "/tmp/"}
+        chrome_options.add_experimental_option("prefs", prefs)
         self.driver = webdriver.Chrome(options=chrome_options)
         self.sesion = AgoraSesion(self.driver)
         self.consultor = CalificacionesConsultor(self.driver)
         self.adeudo_consultor = AdeudoConsultor(self.driver)
+        self.horario_consultor = HorarioConsultor(self.driver)
 
     def iniciar_sesion(self, usuario):
         try:
@@ -35,6 +53,9 @@ class AgoraCLI:
     def consultar_adeudo(self):
         self.adeudo_consultor.consultar_adeudo()
 
+    def consultar_horario(self):
+        self.horario_consultor.consultar_horario()
+
     def ejecutar(self, usuario, args):
         self.iniciar_sesion(usuario)
 
@@ -42,6 +63,8 @@ class AgoraCLI:
             self.consultar_calificaciones()
         if args.adeudo:
             self.consultar_adeudo()
+        if args.horario:
+            self.consultar_horario()
         self.driver.quit()
         print("\n")
         print(Colors.colorize("Gracias por usar AgoraCLI", f"{Colors.BOLD}{Colors.BG_WHITE}{Colors.BLACK}"))
@@ -55,6 +78,7 @@ if __name__ == "__main__":
     parser.add_argument('-m', '--matricula', type=str, required=True, help='Matrícula de estudiante')
     parser.add_argument('-a', '--adeudo', action='store_true', help='Muestra adeudo de estudiante')
     parser.add_argument('-c', '--calificaciones', action='store_true', help='Muestra calificaciones de estudiante')
+    parser.add_argument('-ho', '--horario', action='store_true', help='Muestra horario de estudiante')
     args = parser.parse_args()
     cli = AgoraCLI()
     cli.ejecutar(args.matricula, args)

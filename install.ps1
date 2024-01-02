@@ -9,6 +9,17 @@
 #  / /\  |  __| (_| | | | | (_| |  __| |  / / //_/ /__/ __  /  /\/ /_ | | | \__ | || (_| | | |
 #  \_\ \/ \___|\__,_|_| |_|\__,_|\___|_|  \/  \__\____\/ /_/   \____/ |_| |_|___/\__\__,_|_|_|
 #
+# install.ps1
+# Copyleft (c) 2023 Oscar Adrian Ortiz Bustos
+
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation version 3 of the License.
+
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
 
 $agoracli_path = "$env:USERPROFILE\.config\AgoraCLI" # Path to install AgoraCLI
 # Check if the path doesn't exist
@@ -29,6 +40,7 @@ $files_to_download = @{
     "utils.py" = "https://raw.githubusercontent.com/4DRIAN0RTIZ/AgoraCLI/master/src/utils.py"
     "requirements.txt" = "https://raw.githubusercontent.com/4DRIAN0RTIZ/AgoraCLI/master/requirements.txt"
     "adeudo_consultor.py" = "https://raw.githubusercontent.com/4DRIAN0RTIZ/AgoraCLI/master/src/adeudo_consultor.py"
+    "horario_consultor.py" = "https://raw.githubusercontent.com/4DRIAN0RTIZ/AgoraCLI/master/src/horario_consultor.py"
     "agoracli.bat" = "https://gist.githubusercontent.com/4DRIAN0RTIZ/859c8354e41d629d9bc1329ba5878363/raw/2a65e6d822ffb49ba49e874090c6c62a880afd40/agoracli.bat"
 }
 
@@ -79,12 +91,12 @@ $shortcut.TargetPath = $targetPath
 
 # Guardamos el acceso directo
 $shortcut.Save()
-Write-Host "Uso: agoracli -m <matricula>"
 Write-Host "---"
 Write-Host "Instalación completada."
+Write-Host "---"
+Write-Host "Uso: agoracli -m <matricula> | -c | -a | -ho"
+Write-Host "Ayuda: agoracli -h"
+Write-Host "AgoraCLI es software libre. Copyleft (c) 2023 Oscar Adrian Ortiz Bustos, bajo licencia GPL v3."
 
-
-
-Write-Host "Uso: agoracli -m <matricula>"
 
 
