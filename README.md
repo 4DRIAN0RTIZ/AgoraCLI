@@ -57,12 +57,14 @@ Pueden estar seguros de que el instalador es seguro, aunque les recomiendo **SIE
 ## Uso
 
 ```bash
-agoracli -m <matricula>
+agoracli -m <matricula> -c | -a | -ho
 ```
 
 ### Ejemplo
 ```bash
-agoracli -m 12345678
+agoracli -m 12345678 -c # Muestra las calificaciones
+agoracli -m 12345678 -a # Muestra el adeudo
+agoracli -m 12345678 -ho # Muestra el horario
 ```
 
 ## Contribuciones
