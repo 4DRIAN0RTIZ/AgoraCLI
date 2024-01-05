@@ -12,6 +12,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 """
+import platform
 import argparse
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
@@ -29,7 +30,18 @@ class AgoraCLI:
         chrome_options.add_argument("--headless")
         chrome_options.add_argument("--disable-gpu")
         chrome_options.add_argument("--log-level=3")
-        prefs = {"download.default_directory": "/tmp/"}
+        if platform.system() == "Linux":
+            download_path = "/home/{}/Downloads/HorarioAlumno".format(getpass.getuser())
+            prefs = {"download.default_directory": download_path, "download.prompt_for_download": False, "download.directory_upgrade": True}
+        elif platform.system() == "Windows":
+            download_path = "C:\\Users\\{}\\Downloads\\HorarioAlumno".format(getpass.getuser())
+            prefs = {"download.default_directory": download_path, "download.prompt_for_download": False, "download.directory_upgrade": True}
+        else:
+            raise Exception("Parece que tu S.O. no es compatible con AgoraCLI.\nPor favor, abre un issue en el repositorio de Github mencionando tu S.O.")
+            sys.exit(1)
+
+
+
         chrome_options.add_experimental_option("prefs", prefs)
         self.driver = webdriver.Chrome(options=chrome_options)
         self.sesion = AgoraSesion(self.driver)

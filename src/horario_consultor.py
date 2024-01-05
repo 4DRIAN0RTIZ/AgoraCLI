@@ -12,6 +12,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 """
+import platform
 import tabulate
 import sys
 import os
@@ -29,6 +30,15 @@ from agora_sesion import AgoraSesion
 class HorarioConsultor:
     def __init__(self, driver):
         self.driver = driver
+        if platform.system() == "Linux":
+            home = "/home/{}".format(os.getlogin())
+            self.download_path = "{}/Downloads/HorarioAlumno/".format(home)
+        elif platform.system() == "Windows":
+            home = "C:/Users/{}".format(os.getlogin())
+            self.download_path = "{}/Downloads/HorarioAlumno/".format(home)
+        else:
+            raise Exception("Parece que tu S.O. no es compatible con AgoraCLI.\nPor favor, abre un issue en el repositorio de Github mencionando tu S.O.")
+
 
 
     def obtener_nombre_materia(self):
@@ -60,6 +70,7 @@ class HorarioConsultor:
             export_list = options_div.find_element(By.ID, "trv-main-menu-export-format-list")
             export_option = export_list.find_element(By.CSS_SELECTOR, "[data-command-parameter='XLSX']")
             export_option.click()
+            time.sleep(1)
             # Open file
             self.procesar_horario()
         except Exception as e:
@@ -67,12 +78,26 @@ class HorarioConsultor:
             sys.exit(1)
 
     def open_file(self):
-        output_path = "/tmp"
-        files = os.listdir(output_path)
-        for file in files:
-            if file.startswith("HorarioAlumnos") and file.endswith(".xlsx"):
-                return os.path.join(output_path, file)
+        files = os.listdir(self.download_path)
+        horario_files = [f for f in files if f.startswith("Horario") and f.endswith(".xlsx")]
+
+        latest_file = None
+        latest_time = 0
+        for file in horario_files:
+            file_path = os.path.join(self.download_path, file)
+            file_time = os.path.getmtime(file_path)
+            if file_time > latest_time:
+                latest_time = file_time
+                latest_file = file
+
+        for file in horario_files:
+            if file != latest_file:
+                os.remove(os.path.join(self.download_path, file))
+
+        if latest_file:
+            return os.path.join(self.download_path, latest_file)
         return None
+
 
     def procesar_horario(self):
         file_path = self.open_file()
