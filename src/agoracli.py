@@ -23,6 +23,7 @@ from adeudo_consultor import AdeudoConsultor
 from horario_consultor import HorarioConsultor
 import getpass
 import sys
+import os
 
 class AgoraCLI:
     def __init__(self):
@@ -32,9 +33,11 @@ class AgoraCLI:
         chrome_options.add_argument("--log-level=3")
         if platform.system() == "Linux":
             download_path = "/home/{}/Downloads/HorarioAlumno".format(getpass.getuser())
+            os.makedirs(download_path, exist_ok=True)
             prefs = {"download.default_directory": download_path, "download.prompt_for_download": False, "download.directory_upgrade": True}
         elif platform.system() == "Windows":
             download_path = "C:\\Users\\{}\\Downloads\\HorarioAlumno".format(getpass.getuser())
+            os.makedirs(download_path, exist_ok=True)
             prefs = {"download.default_directory": download_path, "download.prompt_for_download": False, "download.directory_upgrade": True}
         else:
             raise Exception("Parece que tu S.O. no es compatible con AgoraCLI.\nPor favor, abre un issue en el repositorio de Github mencionando tu S.O.")

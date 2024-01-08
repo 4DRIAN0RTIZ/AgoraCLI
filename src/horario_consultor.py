@@ -70,12 +70,20 @@ class HorarioConsultor:
             export_list = options_div.find_element(By.ID, "trv-main-menu-export-format-list")
             export_option = export_list.find_element(By.CSS_SELECTOR, "[data-command-parameter='XLSX']")
             export_option.click()
-            time.sleep(1)
+            self.esperar_descarga()
             # Open file
             self.procesar_horario()
         except Exception as e:
             print("Error: No se pudo obtener el horario del alumno.", e)
             sys.exit(1)
+
+    def esperar_descarga(self):
+        while True:
+            files = os.listdir(self.download_path)
+            horario_files = [f for f in files if f.startswith("Horario") and f.endswith(".xlsx")]
+            if horario_files:
+                break
+            time.sleep(1)
 
     def open_file(self):
         files = os.listdir(self.download_path)
