@@ -84,7 +84,7 @@ Si encuentras algún error o tienes alguna sugerencia, por favor crea un issue o
 
 El proyecto está abierto a nuevas funcionalidades, hasta donde nos lo permita la plataforma de Ágora. A continuación listaré algunas de las funcionalidades que me gustaría agregar en un futuro, siéntete libre de implementarlas y hacer un `PR`.
 
-- [X]Consultar los números de referencia para los pagos. [e055712f](https://github.com/4DRIAN0RTIZ/AgoraCLI/commit/e05712fd3dea9bb2b5b8902f45f793fa64731875)
+- [X] Consultar los números de referencia para los pagos. [e055712f](https://github.com/4DRIAN0RTIZ/AgoraCLI/commit/e05712fd3dea9bb2b5b8902f45f793fa64731875)
 - [ ] Enviar solicitud de atención psicológica.
 - [ ] Cambiar contraseña.
 - [ ] Consultar y actualizar datos personales.
