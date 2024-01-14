@@ -25,17 +25,16 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from utils import Clear
-from agora_sesion import AgoraSesion
 
 class HorarioConsultor:
     def __init__(self, driver):
         self.driver = driver
         if platform.system() == "Linux":
             home = "/home/{}".format(os.getlogin())
-            self.download_path = "{}/Downloads/HorarioAlumno/".format(home)
+            self.download_path = "{}/Downloads/AgoraCLIFiles/".format(home)
         elif platform.system() == "Windows":
-            home = "C:/Users/{}".format(os.getlogin())
-            self.download_path = "{}/Downloads/HorarioAlumno/".format(home)
+            home = "C:\\Users\\{}".format(os.getlogin())
+            self.download_path = "{}\\Downloads\\AgoraCLIFiles\\".format(home)
         else:
             raise Exception("Parece que tu S.O. no es compatible con AgoraCLI.\nPor favor, abre un issue en el repositorio de Github mencionando tu S.O.")
 
