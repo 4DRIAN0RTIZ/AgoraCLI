@@ -72,7 +72,7 @@ agoracli -m <matricula> -c | -a | -ho
 
 ```bash
 agoracli -m 12345678 -c # Muestra las calificaciones
-agoarcli -m 12345678 -a # Muestra el adeudo
+agoarcli -m 12345678 -a # Muestra el adeudo y las referencias de pago.
 agoracli -m 12345678 -ho # Muestra el horario
 ```
 
@@ -84,7 +84,7 @@ Si encuentras algún error o tienes alguna sugerencia, por favor crea un issue o
 
 El proyecto está abierto a nuevas funcionalidades, hasta donde nos lo permita la plataforma de Ágora. A continuación listaré algunas de las funcionalidades que me gustaría agregar en un futuro, siéntete libre de implementarlas y hacer un `PR`.
 
-- [ ] Consultar los números de referencia para los pagos.
+- [X]Consultar los números de referencia para los pagos. [e055712f](https://github.com/4DRIAN0RTIZ/AgoraCLI/commit/e05712fd3dea9bb2b5b8902f45f793fa64731875)
 - [ ] Enviar solicitud de atención psicológica.
 - [ ] Cambiar contraseña.
 - [ ] Consultar y actualizar datos personales.
