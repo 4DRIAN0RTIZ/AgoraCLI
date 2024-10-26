@@ -27,18 +27,9 @@ from selenium.webdriver.support import expected_conditions as EC
 from utils import Clear
 
 class HorarioConsultor:
-    def __init__(self, driver):
+    def __init__(self, driver, download_path):
         self.driver = driver
-        if platform.system() == "Linux":
-            home = "/home/{}".format(os.getlogin())
-            self.download_path = "{}/Downloads/AgoraCLIFiles/".format(home)
-        elif platform.system() == "Windows":
-            home = "C:\\Users\\{}".format(os.getlogin())
-            self.download_path = "{}\\Downloads\\AgoraCLIFiles\\".format(home)
-        else:
-            raise Exception("Parece que tu S.O. no es compatible con AgoraCLI.\nPor favor, abre un issue en el repositorio de Github mencionando tu S.O.")
-
-
+        self.download_path = download_path
 
     def obtener_nombre_materia(self):
         self.driver.get("https://agora.utj.edu.mx/consultaCalificacion/index")

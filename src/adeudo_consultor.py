@@ -27,16 +27,9 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
 class AdeudoConsultor:
-    def __init__(self, driver):
+    def __init__(self, driver, download_path):
         self.driver = driver
-        if platform.system() == "Linux":
-            home = "/home/{}/".format(os.getlogin())
-            self.download_path = "{}Downloads/AgoraCLIFiles/".format(home)
-        elif platform.system() == "Windows":
-            home = "C:\\Users\\{}\\".format(os.getlogin())
-            self.download_path = "{}Downloads\\AgoraCLIFiles\\".format(home)
-        else:
-            raise Exception("Parece que hubo un error al detectar tu sistema operativo. Por favor, reporta este error.")
+        self.download_path = download_path
 
     def consultar_adeudo(self):
         Clear.pantalla()

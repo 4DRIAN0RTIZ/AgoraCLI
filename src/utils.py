@@ -14,6 +14,9 @@ GNU General Public License for more details.
 """
 import sys
 import shutil
+import platform
+import os
+from pathlib import Path
 
 class Colors:
     RESET = '\033[0m'
@@ -53,3 +56,41 @@ class Clear:
     # Borrar el 100% de la linea anterior
     def linea_anterior():
         print("\033[F\033[K", end="")
+
+
+def get_download_path():
+    """
+    Returns the download path based on the operating system.
+    """
+    user_home = Path.home()
+    if platform.system() == "Linux":
+        download_path = f"{user_home}/Downloads/AgoraCLIFiles/"
+    elif platform.system() == "Windows":
+        download_path = f"{user_home}\\Downloads\\AgoraCLIFiles\\"
+    elif platform.system() == "Darwin":  # Para macOS
+        download_path = f"{user_home}/Downloads/AgoraCLIFiles/"
+    else:
+        raise Exception("S.O. no compatible. Reporta este problema especificando tu sistema operativo.")
+    
+    # Crea el directorio de descarga si no existe
+    os.makedirs(download_path, exist_ok=True)
+
+    # prefs
+    prefs = {
+        "download.default_directory": download_path,
+        "download.prompt_for_download": False,
+        "download.directory_upgrade": True
+    }
+    
+    return download_path, prefs
+
+def show_goodbye_message():
+    """
+    Imprime un mensaje de despedida con agradecimientos y enlaces.
+    """
+    print("\n")
+    print(Colors.colorize("Gracias por usar AgoraCLI", f"{Colors.BOLD}{Colors.BG_WHITE}{Colors.BLACK}"))
+    github_profile = Colors.colorize("https://github.com/4DRIAN0RTIZ", Colors.GREEN)
+    blog_site = Colors.colorize("https://cuevaneander.tech", Colors.GREEN)
+    print(f"Github: {github_profile}")
+    print(f"Blog: {blog_site}")
