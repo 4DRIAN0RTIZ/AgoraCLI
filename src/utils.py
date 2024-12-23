@@ -57,7 +57,6 @@ class Clear:
     def linea_anterior():
         print("\033[F\033[K", end="")
 
-
 def get_download_path():
     """
     Returns the download path based on the operating system.
@@ -84,13 +83,11 @@ def get_download_path():
     
     return download_path, prefs
 
-def show_goodbye_message():
-    """
-    Imprime un mensaje de despedida con agradecimientos y enlaces.
-    """
+def goodbye_message():
     print("\n")
     print(Colors.colorize("Gracias por usar AgoraCLI", f"{Colors.BOLD}{Colors.BG_WHITE}{Colors.BLACK}"))
     github_profile = Colors.colorize("https://github.com/4DRIAN0RTIZ", Colors.GREEN)
-    blog_site = Colors.colorize("https://cuevaneander.tech", Colors.GREEN)
+    blog_site = Colors.colorize("https://neandertech.netlify.app/blog", Colors.GREEN)
     print(f"Github: {github_profile}")
     print(f"Blog: {blog_site}")
+    sys.exit(0)

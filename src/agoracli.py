@@ -16,7 +16,7 @@ import platform
 import argparse
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
-from utils import Colors, get_download_path, show_goodbye_message
+from utils import Colors, get_download_path, goodbye_message
 from agora_sesion import AgoraSesion
 from calificaciones_consultor import CalificacionesConsultor
 from adeudo_consultor import AdeudoConsultor
@@ -33,6 +33,7 @@ class AgoraCLI:
         chrome_options.add_argument("--log-level=3")
         download_path, prefs = get_download_path()
         chrome_options.add_experimental_option("prefs", prefs)
+
         self.driver = webdriver.Chrome(options=chrome_options)
         self.sesion = AgoraSesion(self.driver)
         self.consultor = CalificacionesConsultor(self.driver)
@@ -68,9 +69,8 @@ class AgoraCLI:
         if args.horario:
             self.consultar_horario()
         self.driver.quit()
+        goodbye_message()
 
-        show_goodbye_message()
-        
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Consulta calificaciones en Agora UTJ.')
     parser.add_argument('-m', '--matricula', type=str, required=True, help='Matrícula de estudiante')
@@ -78,5 +78,7 @@ if __name__ == "__main__":
     parser.add_argument('-c', '--calificaciones', action='store_true', help='Muestra calificaciones de estudiante')
     parser.add_argument('-ho', '--horario', action='store_true', help='Muestra horario de estudiante')
     args = parser.parse_args()
+
     cli = AgoraCLI()
     cli.ejecutar(args.matricula, args)
+

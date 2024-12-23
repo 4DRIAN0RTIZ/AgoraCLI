@@ -34,56 +34,75 @@ class AdeudoConsultor:
     def consultar_adeudo(self):
         Clear.pantalla()
         print("Consultando adeudo...")
-        self.driver.get("https://agora.utj.edu.mx/Finanzas/referencias")
+        self.driver.get("https://agora.utj.edu.mx/adeudo/adeudo")
         try:
-            element = WebDriverWait(self.driver, 10).until(
-                EC.element_to_be_clickable((By.CSS_SELECTOR, "#trv-main-menu-export-command > .k-link"))
+            # Esperar a que el div con id "Totales" sea visible
+            totales_div = WebDriverWait(self.driver, 10).until(
+                EC.visibility_of_element_located((By.ID, "men"))
             )
-            time.sleep(2)
-            actions = ActionChains(self.driver)
-            actions.move_to_element(element).perform()
-            options_div = WebDriverWait(self.driver, 10).until(
-                EC.visibility_of_element_located((By.CLASS_NAME, "k-animation-container"))
-            )
-            time.sleep(2)
-            export_list = options_div.find_element(By.ID, "trv-main-menu-export-format-list")
-            export_option = export_list.find_element(By.CSS_SELECTOR, "[data-command-parameter='XLSX']")
-            export_option.click()
-            self.esperar_descarga()
-            # Open file
-            self.procesar_referencias()
+            # Obtener el valor del div "Totales"
+            total_adeudo_text = totales_div.text
+            if total_adeudo_text.startswith("Usted debe"):
+                # Continuar a Finanzas -> Referencias
+                self.driver.get("https://agora.utj.edu.mx/Finanzas/referencias")
+                element = WebDriverWait(self.driver, 10).until(
+                    EC.element_to_be_clickable((By.CSS_SELECTOR, "#trv-main-menu-export-command > .k-link"))
+                )
+                time.sleep(2)
+                actions = ActionChains(self.driver)
+                actions.move_to_element(element).perform()
+                options_div = WebDriverWait(self.driver, 10).until(
+                    EC.visibility_of_element_located((By.CLASS_NAME, "k-animation-container"))
+                )
+                time.sleep(2)
+                export_list = options_div.find_element(By.ID, "trv-main-menu-export-format-list")
+                export_option = export_list.find_element(By.CSS_SELECTOR, "[data-command-parameter='XLSX']")
+                export_option.click()
+                self.esperar_descarga()
+                # Open file
+                self.procesar_referencias()
+            else:
+                # Mostrar mensaje "Sin Adeudo" con bordes en ASCII
+                print("+" + "-"*12 + "+")
+                print("| Sin Adeudo |")
+                print("+" + "-"*12 + "+")
         except Exception as e:
             print("Error: No se pudo obtener las referencias bancarias del alumno.", e)
             sys.exit(1)
-
+ 
     def esperar_descarga(self):
+        # Elimina archivos anteriores
+        files = os.listdir(self.download_path)
+        for file in files:
+            if file.startswith("Referencia") and file.endswith(".xlsx"):
+                os.remove(os.path.join(self.download_path, file))
+
+        # Esperar hasta que un nuevo archivo se descargue
         while True:
             files = os.listdir(self.download_path)
             horario_files = [f for f in files if f.startswith("Referencia") and f.endswith(".xlsx")]
             if horario_files:
+                time.sleep(1)  # Asegurar que la descarga esté completamente finalizada
                 break
-            time.sleep(1)
 
     def open_file(self):
         files = os.listdir(self.download_path)
         horario_files = [f for f in files if f.startswith("Referencia") and f.endswith(".xlsx")]
 
-        latest_file = None
-        latest_time = 0
-        for file in horario_files:
-            file_path = os.path.join(self.download_path, file)
-            file_time = os.path.getmtime(file_path)
-            if file_time > latest_time:
-                latest_time = file_time
-                latest_file = file
+        if not horario_files:
+            print("Error: No se encontró ningún archivo de horario.")
+            sys.exit(1)
 
+        # Seleccionar el archivo más reciente
+        latest_file = max(horario_files, key=lambda f: os.path.getmtime(os.path.join(self.download_path, f)))
+
+        # Confirmar que solo se procese el archivo más reciente
         for file in horario_files:
             if file != latest_file:
                 os.remove(os.path.join(self.download_path, file))
 
-        if latest_file:
-            return os.path.join(self.download_path, latest_file)
-        return None
+        return os.path.join(self.download_path, latest_file)
+    
 
     def procesar_referencias(self):
         Clear.linea_anterior()
