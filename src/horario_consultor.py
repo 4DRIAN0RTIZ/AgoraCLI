@@ -22,7 +22,7 @@ import time  # Importar el módulo time
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from utils import Clear
 
@@ -30,6 +30,7 @@ class HorarioConsultor:
     def __init__(self, driver, download_path):
         self.driver = driver
         self.download_path = download_path
+
 
     def obtener_nombre_materia(self):
         self.driver.get("https://agora.utj.edu.mx/consultaCalificacion/index")
@@ -68,33 +69,37 @@ class HorarioConsultor:
             sys.exit(1)
 
     def esperar_descarga(self):
+        # Elimina archivos anteriores
+        files = os.listdir(self.download_path)
+        for file in files:
+            if file.startswith("Horario") and file.endswith(".xlsx"):
+                os.remove(os.path.join(self.download_path, file))
+
+        # Esperar hasta que un nuevo archivo se descargue
         while True:
             files = os.listdir(self.download_path)
             horario_files = [f for f in files if f.startswith("Horario") and f.endswith(".xlsx")]
             if horario_files:
+                time.sleep(1)  # Asegurar que la descarga esté completamente finalizada
                 break
-            time.sleep(1)
 
     def open_file(self):
         files = os.listdir(self.download_path)
         horario_files = [f for f in files if f.startswith("Horario") and f.endswith(".xlsx")]
 
-        latest_file = None
-        latest_time = 0
-        for file in horario_files:
-            file_path = os.path.join(self.download_path, file)
-            file_time = os.path.getmtime(file_path)
-            if file_time > latest_time:
-                latest_time = file_time
-                latest_file = file
+        if not horario_files:
+            print("Error: No se encontró ningún archivo de horario.")
+            sys.exit(1)
 
+        # Seleccionar el archivo más reciente
+        latest_file = max(horario_files, key=lambda f: os.path.getmtime(os.path.join(self.download_path, f)))
+
+        # Confirmar que solo se procese el archivo más reciente
         for file in horario_files:
             if file != latest_file:
                 os.remove(os.path.join(self.download_path, file))
 
-        if latest_file:
-            return os.path.join(self.download_path, latest_file)
-        return None
+        return os.path.join(self.download_path, latest_file)
 
 
     def procesar_horario(self):
@@ -119,12 +124,12 @@ class HorarioConsultor:
         hora4 = df.loc[14, 1]
         hora5 = df.loc[15, 1]
         hora6 = df.loc[16, 1]
-        hora7 = df.loc[18, 1]
+        hora7 = df.loc[17, 1]
 
         correoProfesor = df.loc[21, 1]
         
         def materias_por_dia(dia):
-            rango = list(range(11, 17)) + list(range(18, 19))
+            rango = list(range(11, 18))
             materias = []
             for i in rango:
                 clase = df.loc[i, dia]
