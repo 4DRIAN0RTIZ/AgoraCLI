@@ -21,6 +21,7 @@ from agora_sesion import AgoraSesion
 from calificaciones_consultor import CalificacionesConsultor
 from adeudo_consultor import AdeudoConsultor
 from horario_consultor import HorarioConsultor
+from solicitud_atencion_ps import AtencionPsicologicaSolicitud
 import getpass
 import sys
 import os
@@ -28,7 +29,7 @@ import os
 class AgoraCLI:
     def __init__(self):
         chrome_options = Options()
-        chrome_options.add_argument("--headless")
+        # chrome_options.add_argument("--headless")
         chrome_options.add_argument("--disable-gpu")
         chrome_options.add_argument("--log-level=3")
         download_path, prefs = get_download_path()
@@ -39,6 +40,7 @@ class AgoraCLI:
         self.consultor = CalificacionesConsultor(self.driver)
         self.adeudo_consultor = AdeudoConsultor(self.driver, download_path)
         self.horario_consultor = HorarioConsultor(self.driver, download_path)
+        self.solicitud_atencion_ps = AtencionPsicologicaSolicitud(self.driver, download_path)
 
     def iniciar_sesion(self, usuario):
         try:
@@ -59,6 +61,9 @@ class AgoraCLI:
     def consultar_horario(self):
         self.horario_consultor.consultar_horario()
 
+    def solicitar_atencion_psicologica(self):
+        self.solicitud_atencion_ps.solicitar_atencion_psicologica()
+
     def ejecutar(self, usuario, args):
         self.iniciar_sesion(usuario)
 
@@ -68,6 +73,8 @@ class AgoraCLI:
             self.consultar_adeudo()
         if args.horario:
             self.consultar_horario()
+        if args.soli_psico:
+            self.solicitar_atencion_psicologica()
         self.driver.quit()
         goodbye_message()
 
@@ -77,6 +84,7 @@ if __name__ == "__main__":
     parser.add_argument('-a', '--adeudo', action='store_true', help='Muestra adeudo de estudiante y las referencias para pagar')
     parser.add_argument('-c', '--calificaciones', action='store_true', help='Muestra calificaciones de estudiante')
     parser.add_argument('-ho', '--horario', action='store_true', help='Muestra horario de estudiante')
+    parser.add_argument('-sp', '--soli_psico', action='store_true', help='Solictar atención psicológica')
     args = parser.parse_args()
 
     cli = AgoraCLI()
