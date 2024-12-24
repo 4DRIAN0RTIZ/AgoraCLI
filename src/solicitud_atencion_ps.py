@@ -21,7 +21,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from openpyxl.utils import range_boundaries
-from utils import Clear
+from utils import Clear, Colors
 from datetime import datetime
 
 class AtencionPsicologicaSolicitud:
@@ -43,9 +43,6 @@ class AtencionPsicologicaSolicitud:
         except Exception as e:
             print(f"Error: {str(e)}")
             sys.exit(1)
-        time.sleep(2)
-        self.driver.quit()
-        sys.exit(0)
 
     def esperar_descarga(self):
         # Elimina archivos anteriores
@@ -105,11 +102,13 @@ class AtencionPsicologicaSolicitud:
         # Leer y asignar valores
         campoNombreCompleto = input("Nombre completo: ")
         campoMatricula = input("Matrícula: ")
-        campoPrograma = input("Carrera (TSU(1)/ING(2)): ")
+        campoPrograma = input("Programa (TSU(1)/ING(2)): ")
         if campoPrograma == "1":
             posicionCeldaP = "I12"
+            campoPrograma = "TSU"
         elif campoPrograma == "2":
             posicionCeldaP = "O12"
+            campoPrograma = "ING"
         else:
             print("Error: Carrera no válida.")
             sys.exit(1)
@@ -119,24 +118,30 @@ class AtencionPsicologicaSolicitud:
         campoUnidadAcademica = input("Unidad Académica (Miravalle(1)/CCD(2)): ")
         if campoUnidadAcademica == "1":
             posicionCeldaU = "I17"
+            campoUnidadAcademica = "Miravalle"
         elif campoUnidadAcademica == "2":
             posicionCeldaU = "I18"
+            campoUnidadAcademica = "CCD"
         else:
             print("Error: Unidad Académica no válida.")
             sys.exit(1)
         campoTipo = input("Tipo de atención (Asesoría(1)/Canalización(2)): ")
         if campoTipo == "1":
             posicionCeldaT = "O17"
+            campoTipo = "Asesoría"
         elif campoTipo == "2":
             posicionCeldaT = "O18"
+            campoTipo = "Canalización"
         else:
             print("Error: Tipo de atención no válida.")
             sys.exit(1)
         campoPrimeraVez = input("¿Es la primera ocasión que recibes atención psicológica por parte de la UTJ? (S/N): ")
         if campoPrimeraVez.upper() == "S":
             posicionCeldaPV = "U20"
+            campoPrimeraVez = "Sí"
         elif campoPrimeraVez.upper() == "N":
             posicionCeldaPV = "X20"
+            campoPrimeraVez = "No"
         else:
             print("Error: Opción no válida.")
             sys.exit(1)
@@ -160,4 +165,41 @@ class AtencionPsicologicaSolicitud:
         # Guardar el archivo con los cambios
         nuevo_path = file_path.replace("Formato", "Solicitud")
         wb.save(nuevo_path)
-        print(f"Archivo guardado como {nuevo_path}")
+        input_file = WebDriverWait(self.driver, 10).until(
+            EC.element_to_be_clickable((By.CSS_SELECTOR, '[type="file"]'))
+        )
+        input_file.send_keys(nuevo_path)
+        comentariosTxt = WebDriverWait(self.driver, 10).until(
+            EC.element_to_be_clickable((By.ID, 'txtComentarios'))
+        )
+        extra = input("Deseas agregar comentarios adicionales? (S/N): ")
+        if extra.upper() == "S":
+            comentarios = input("Comentarios: ")
+            comentariosTxt.send_keys(comentarios)
+        btn_enviar = WebDriverWait(self.driver, 10).until(
+            EC.element_to_be_clickable((By.ID, 'btnEnviar'))
+        )
+        print("========================================")
+        print("RESUMEN DE LA SOLICITUD")
+        print(f"{Colors.colorize('Nombre completo:', Colors.GREEN)} {campoNombreCompleto}")
+        print(f"{Colors.colorize('Matrícula:', Colors.GREEN)} {campoMatricula}")
+        print(f"{Colors.colorize('Programa:', Colors.GREEN)} {campoPrograma}")
+        print(f"{Colors.colorize('Carrera:', Colors.GREEN)} {campoCarrera}")
+        print(f"{Colors.colorize('Grado:', Colors.GREEN)} {campoGrado}")
+        print(f"{Colors.colorize('Turno:', Colors.GREEN)} {campoTurno}")
+        print(f"{Colors.colorize('Unidad Académica:', Colors.GREEN)} {campoUnidadAcademica}")
+        print(f"{Colors.colorize('Tipo de atención:', Colors.GREEN)} {campoTipo}")
+        print(f"{Colors.colorize('Primera vez:', Colors.GREEN)} {campoPrimeraVez}")
+        print(f"{Colors.colorize('Motivo:', Colors.GREEN)} {campoMotivo}")
+        print(f"{Colors.colorize('Nombre del tutor:', Colors.GREEN)} {campoNombreTutor}")
+        print(f"{Colors.colorize('Fecha de solicitud:', Colors.GREEN)} {campoFechaSolicitud}")
+        print("========================================")
+        if btn_enviar.is_enabled():
+            option = input("¿Deseas enviar la solicitud? (S/N): ")
+            if option.upper() == "S":
+                btn_enviar.click()
+                print("Solicitud enviada con éxito.")
+            else:
+                print("Solicitud no enviada.")
+        else:
+            print("Error: No se pudo enviar la solicitud.")

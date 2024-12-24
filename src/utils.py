@@ -57,6 +57,12 @@ class Clear:
     def linea_anterior():
         print("\033[F\033[K", end="")
 
+    @staticmethod
+    # Borrar el 100% de una cantidad de lineas
+    def lineas_anteriores(cantidad):
+        for _ in range(cantidad):
+            Clear.linea_anterior()
+
 def get_download_path():
     """
     Returns the download path based on the operating system.

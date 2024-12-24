@@ -29,7 +29,7 @@ import os
 class AgoraCLI:
     def __init__(self):
         chrome_options = Options()
-        # chrome_options.add_argument("--headless")
+        chrome_options.add_argument("--headless")
         chrome_options.add_argument("--disable-gpu")
         chrome_options.add_argument("--log-level=3")
         download_path, prefs = get_download_path()
