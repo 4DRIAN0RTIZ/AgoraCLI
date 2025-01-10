@@ -117,33 +117,63 @@ class HorarioConsultor:
         gradoGrupo = df.loc[2, 5].split(":")[-1].strip()
         carreraAdscrita = df.loc[1, 5].split(":")[-1].strip()
 
-        # Obtener clases
-        hora1 = df.loc[11, 1]
-        hora2 = df.loc[12, 1]
-        hora3 = df.loc[13, 1]
-        hora4 = df.loc[14, 1]
-        hora5 = df.loc[15, 1]
-        hora6 = df.loc[16, 1]
-        hora7 = df.loc[17, 1]
 
-        correoProfesor = df.loc[21, 1]
         
-        def materias_por_dia(dia):
-            rango = list(range(11, 18))
+        def obtener_horas(df, inicio=11, fin=20, columna=1):
+            horas = []
+            horas_necesarias = 7
+            i = inicio
+            indices_validos = []
+            max_fila = df.shape[0]  # Obtiene el número máximo de filas
+            
+            try:
+                while len(horas) < horas_necesarias and i < max_fila:
+                    hora = df.loc[i, columna]
+                    # Verifica formato de hora (HH:MM-HH:MM)
+                    if isinstance(hora, str) and len(hora.split("-")) == 2:
+                        horas.append(hora)
+                        indices_validos.append(i)
+                    i += 1
+                
+                # Si no se encontraron suficientes horas
+                if len(horas) < horas_necesarias:
+                    print(f"Advertencia: Solo se encontraron {len(horas)} horas válidas de {horas_necesarias}")
+                    # Rellenar con "No disponible" hasta tener 7 horas
+                    horas.extend(["No disponible"] * (horas_necesarias - len(horas)))
+                    
+            except KeyError as e:
+                print(f"Error: Índice fuera de rango - {e}")
+                horas.extend(["No disponible"] * (horas_necesarias - len(horas)))
+            except Exception as e:
+                print(f"Error inesperado: {e}")
+                horas.extend(["No disponible"] * (horas_necesarias - len(horas)))
+            
+            return horas, indices_validos
+
+        def materias_por_dia(df, dia, indices):
+            """
+            Obtiene las materias para un día específico usando los índices válidos
+            """
             materias = []
-            for i in rango:
+            for i in indices:
                 clase = df.loc[i, dia]
                 if pd.isna(clase):
                     materias.append("No hay clase")
                 else:
                     nombreMateria = " ".join(clase.split())
                     materias.append(nombreMateria.strip())
+            
+            # Si no hay suficientes materias, rellenar con "No hay clase"
+            while len(materias) < 7:
+                materias.append("No hay clase")
+                
             return materias
 
+
         dias_semana = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes"]
-        horas = [hora1, hora2, hora3, hora4, hora5, hora6, hora7]
+        horas, indices_validos = obtener_horas(df, inicio=11, fin=21, columna=1)
         rango = list(range(2,4)) + list(range(7, 10))
-        materias_dias = [materias_por_dia(i) for i in rango]
+        materias_dias = [materias_por_dia(df, dia, indices_validos) for dia in rango]
         materiasVariable = self.obtener_nombre_materia()
 
         patronesRegex = [re.compile(re.escape(materia)) for materia in materiasVariable]
@@ -173,3 +203,42 @@ class HorarioConsultor:
         # Center content
         col_align = ["center" for i in range(6)]
         print(tabulate.tabulate(horario_list, headers=["H", "L", "M", "X", "J", "V"], tablefmt="fancy_grid", colalign=col_align))
+
+        correoProfesor = df.loc[21:30, 1]
+        materias_validas = materiasVariable
+
+        for texto in correoProfesor:
+            if not isinstance(texto, str) or len(texto.strip()) == 0:
+                continue
+                
+            palabras = texto.split()
+            correo = ''
+            nombre = []
+            materia = []
+            
+            # Encontrar el correo primero
+            for palabra in palabras:
+                if '@' in palabra:
+                    correo = palabra
+                    break
+            
+            # Separar materia y nombre
+            encontro_mayusculas = False
+            for palabra in palabras:
+                if palabra == correo:
+                    break
+                if all(c.isupper() for c in palabra if c.isalpha()):
+                    encontro_mayusculas = True
+                    nombre.append(palabra)
+                elif not encontro_mayusculas:
+                    materia.append(palabra)
+                    
+            # Buscar la materia en la lista de materias válidas
+            materia_str = ' '.join(materia)
+            for materia_valida in materias_validas:
+                if materia_str.lower() in materia_valida.lower():
+                    materia_str = materia_valida
+                    break
+                    
+            nombre_str = ' '.join(nombre)
+            print(f"{materia_str} - {nombre_str} - {correo}")

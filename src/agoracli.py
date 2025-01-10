@@ -80,5 +80,11 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     cli = AgoraCLI()
-    cli.ejecutar(args.matricula, args)
+    try:
+        cli.ejecutar(args.matricula, args)
+    except KeyboardInterrupt:
+        cli.driver.quit()
+        goodbye_message()
+        sys.exit(0)
+
 
