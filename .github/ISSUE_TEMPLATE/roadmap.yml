@@ -1,6 +1,6 @@
 name: Item de roadmap
 description: Una entrada del roadmap publico (la consume el widget del portfolio).
-title: "[roadmap] "
+title: "[roadmap] <Nombre> | <Milestone>"
 labels: ["roadmap"]
 body:
   - type: markdown
@@ -11,6 +11,8 @@ body:
         - Estado: agrega una etiqueta `roadmap:working`, `roadmap:planned` o `roadmap:idea`
           (sin etiqueta = "planeado"). Cierra el issue cuando este hecho.
         - Item activo ("ahora"): etiqueta `roadmap:now` o autoasignate el issue.
+        - Título: sigue el patrón `Nombre | Milestone`. El Milestone es una fase o epic real (ej. "Rendimiento del blog"), NO una versión.
+        - Todo lo que escribas después de una línea `===` queda solo en el issue: nunca se manda a la página de roadmap.
   - type: textarea
     id: summary
     attributes:
@@ -25,3 +27,12 @@ body:
       value: |
         - [ ] Primera tarea
         - [ ] Segunda tarea
+  - type: textarea
+    id: details
+    attributes:
+      label: Detalle interno (opcional)
+      description: Notas o contexto interno. No se muestra en /roadmap.
+      value: |
+        ===
+    validations:
+      required: false
