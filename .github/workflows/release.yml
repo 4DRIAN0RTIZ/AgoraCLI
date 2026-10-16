@@ -1,0 +1,102 @@
+name: Publish release
+
+on:
+  push:
+    branches: [master]
+    paths-ignore:
+      - CHANGELOG.md
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  bump:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.compute.outputs.version }}
+      released: ${{ steps.compute.outputs.released }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install git-cliff
+        uses: orhun/git-cliff-action@v4
+        id: bumped
+        with:
+          config: cliff.toml
+          args: --bumped-version
+
+      - name: Compute version and decide if release is needed
+        id: compute
+        run: |
+          VERSION="$(echo "${{ steps.bumped.outputs.content }}" | tail -n 1 | tr -d '[:space:]')"
+          LATEST_TAG="$(git tag --list 'v*' --sort=-v:refname | head -n 1 || true)"
+          echo "Ultimo tag: ${LATEST_TAG:-ninguno}"
+          echo "Version calculada: $VERSION"
+          if [[ -z "$VERSION" || "$VERSION" == "$LATEST_TAG" ]]; then
+            echo "released=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+            echo "released=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Generate CHANGELOG.md for the new version
+        if: steps.compute.outputs.released == 'true'
+        uses: orhun/git-cliff-action@v4
+        with:
+          config: cliff.toml
+          args: --tag ${{ steps.compute.outputs.version }}
+        env:
+          OUTPUT: CHANGELOG.md
+
+      - name: Commit, tag and push
+        if: steps.compute.outputs.released == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add CHANGELOG.md
+          git commit -m "chore(release): ${{ steps.compute.outputs.version }}"
+          git tag -a "${{ steps.compute.outputs.version }}" -m "Release ${{ steps.compute.outputs.version }}"
+          git push origin HEAD:master
+          git push origin "${{ steps.compute.outputs.version }}"
+
+  release:
+    needs: bump
+    if: needs.bump.outputs.released == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ needs.bump.outputs.version }}
+
+      - name: Generate release notes
+        uses: orhun/git-cliff-action@v4
+        id: git-cliff
+        with:
+          config: cliff.toml
+          args: --latest --strip all
+
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "${{ needs.bump.outputs.version }}" \
+            --title "${{ needs.bump.outputs.version }}" \
+            --notes "${{ steps.git-cliff.outputs.content }}"
+
+  sync-dev:
+    needs: bump
+    if: needs.bump.outputs.released == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: master
+
+      - name: Fast-forward dev to master
+        run: |
+          git push origin HEAD:dev
